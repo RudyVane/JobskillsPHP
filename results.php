@@ -8,6 +8,8 @@ if (isset($_SESSION['job_offer']) && isset($_SESSION['cv']) && isset($_SESSION['
     $cv = $_SESSION['cv'];
     $matching_skills = $_SESSION['matching_skills'];
 	$match = $_SESSION['match'];
+	
+                  
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +20,7 @@ if (isset($_SESSION['job_offer']) && isset($_SESSION['cv']) && isset($_SESSION['
 </head>
 <body>
 <h2>Uitkomst</h2>
-<p>Percentage: <?php echo nl2br($match); ?></p>
+<p>Percentage: <?php echo $match; ?></p>
     <div class="flex-container">
 
         <!-- Display variable 1: Required skills and tools from the job offer -->

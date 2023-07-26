@@ -26,16 +26,16 @@ class ApiHandler
                 if ($this->isUrl($job)) {
                     // Text processing for job offer and CV
                     $jobOfferText = $this->getPlainTextFromUrl($job);
-				}else {
-					$jobOfferText = $job;
-				}
+                } else {
+                    $jobOfferText = $job;
+                }
 
                 // Define the data for the API call for the job offer
                 $data_job_offer = [
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'Extract the required skills and qualifications from the following job offer. Please focus only on the skills and qualifications directly relevant to the role. Omit general terms and avoid including unrelated words like 'phone,' 'budget,' and similar non-skill related terms. Your response should include a concise list of essential skills and qualifications required for the job, as a unordered list, your answer must be in dutch:',
+                            'content' => 'Extract the required skills and qualifications from the following job offer. Please focus only on the skills and qualifications directly relevant to the role. Omit general terms and avoid including unrelated words like \'phone,\' \'budget,\' and similar non-skill related terms. Your response should include a unordered list of essential skills and qualifications required for the job, your answer must be in dutch:',
                         ],
                         [
                             'role' => 'user',
@@ -49,13 +49,18 @@ class ApiHandler
 
                 // Make the API call for the job offer
                 $response_job_offer = $this->call_openai_api($data_job_offer);
+	
+				// Get the matching skills from the API response
+				$job = $response_job_offer['choices'][0]['message']['content'];
 
+				// Count the skills in the matching skills result
+				$count_job = count(explode(" ", strip_tags($job)));
                 // Define the data for the API call for the CV
                 $data_cv = [
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'Extract the jobskills from the candidate\'s CV (use 1 word) as a unordered list in dutch:',
+                            'content' => 'Extract the jobskills from the candidate\'s CV (use one word per skill) as an unordered list in dutch:',
                         ],
                         [
                             'role' => 'user',
@@ -71,72 +76,46 @@ class ApiHandler
                 $response_cv = $this->call_openai_api($data_cv);
 
                 // Make an API call to compare job offer and CV responses
-                $data_match = [
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => 'Read this job response:',
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => $response_job_offer['choices'][0]['message']['content'],
-                        ],
-                        [
-                            'role' => 'system',
-                            'content' => 'Read this CV response:',
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => $response_cv['choices'][0]['message']['content'],
-                        ],
-                        [
-                            'role' => 'system',
-                            'content' => 'what skills are in both files, your answer must be in dutch',
-                        ],
-                    ],
-                    'temperature' => 0,
-                    'max_tokens' => 3000,
-                    'model' => 'gpt-3.5-turbo-16k',
-                ];
+			$data_match = [
+				'messages' => [
+            [
+                'role' => 'system',
+                'content' => 'Compare the skills in the job offer and CV and return the matching skills as a list in Dutch, only return a unordered list of matching skills, no extra text:',
+            ],
+            [
+                'role' => 'user',
+                'content' => $response_job_offer['choices'][0]['message']['content'],
+            ],
+            [
+                'role' => 'system',
+                'content' => 'CV',
+            ],
+            [
+                'role' => 'user',
+                'content' => $response_cv['choices'][0]['message']['content'],
+            ],
+        ],
+        'temperature' => 0,
+        'max_tokens' => 3000,
+        'model' => 'gpt-3.5-turbo-16k',
+    ];
 
-                $response_match = $this->call_openai_api($data_match);
+    $response_match = $this->call_openai_api($data_match);
+	
+	// Get the matching skills from the API response
+	$matching_skills_result = $response_match['choices'][0]['message']['content'];
+
+	// Count the skills in the matching skills result
+	$count_matching_skills = count(explode(" ", strip_tags($matching_skills_result)));
+	$percentage = $count_matching_skills / $count_job *100;
+    
+    // Store the data in the session to access it in the results page
+    session_start();
+    $_SESSION['job_offer'] = $response_job_offer['choices'][0]['message']['content'];
+    $_SESSION['cv'] = $response_cv['choices'][0]['message']['content'];
+    $_SESSION['matching_skills'] = $response_match['choices'][0]['message']['content'];
+	$_SESSION['match'] = $percentage . "%";
 				
-				$response_percentage = [
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => 'Read this job response:',
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => $response_job_offer['choices'][0]['message']['content'],
-                        ],
-                        [
-                            'role' => 'system',
-                            'content' => 'Read this CV response:',
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => $response_cv['choices'][0]['message']['content'],
-                        ],
-                        [
-                            'role' => 'system',
-                            'content' => 'calculate the percentage of skills that are in both files, your answer must be in dutch and you only return the number, no text',
-                        ],
-                    ],
-                    'temperature' => 0,
-                    'max_tokens' => 3000,
-                    'model' => 'gpt-3.5-turbo-16k',
-                ];
-
-                $response_calc = $this->call_openai_api($response_percentage);
-
-                // Store the data in the session to access it in the results page
-                session_start();
-                $_SESSION['job_offer'] = $response_job_offer['choices'][0]['message']['content'];
-                $_SESSION['cv'] = $response_cv['choices'][0]['message']['content'];
-                $_SESSION['matching_skills'] = $response_match['choices'][0]['message']['content'];
-				$_SESSION['match'] = $response_calc['choices'][0]['message']['content'];
                 // Redirect to the results page to display the API response
                 header("Location: results.php");
                 exit();
@@ -145,7 +124,6 @@ class ApiHandler
                 header("Location: index.php?error=missing_fields");
                 exit();
             }
-        
         }
     }
 
