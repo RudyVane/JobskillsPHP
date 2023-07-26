@@ -23,7 +23,7 @@ Before running the application, you need to make sure you have the following com
 ## How to Use
 
 1. On the main page, you will see a form with two input fields:
-   - **vacaturetekst of URL**: Enter the URL of the job description or the text of the jod description.
+   - **vacaturetekst of URL**: Enter the URL of the job description or the text of the job description.
    - **cv**: Enter the candidate's CV.
 
 2. Click the **Submit** button to initiate the process.
