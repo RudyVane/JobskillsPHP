@@ -1,0 +1,93 @@
+body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+			background-color: #9dbef2;
+        }
+		
+		form {
+			max-width: 700px;
+			margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f7f7f7;
+		}
+
+        form p {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+		
+		p {
+			color: blue;
+			text-align: center;
+		}
+
+        form input[type="url"],
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        form input[type="submit"] {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
+			color: blue;
+            margin-top: 10px;
+			text-align: center;
+        }
+		
+		h3 {
+			color: blue;
+			text-align: center;
+        }
+
+        .result-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+            .result-box {
+            width: 25%;
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            margin: 10px;
+            text-align: center;
+        }
+		 .result-container {
+            display: flex;
+        }
+		
+		.flex-container {
+			display: flex;
+			width: 100%;
+			max-width: 1200px;
+		}
+		.flex-item {
+			flex: 1;
+			margin: 10px;
+			padding: 20px;
+			background-color: #ffffff;
+			border: 1px solid #ccc;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+
+    
