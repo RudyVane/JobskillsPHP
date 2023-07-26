@@ -23,12 +23,12 @@ Before running the application, you need to make sure you have the following com
 ## How to Use
 
 1. On the main page, you will see a form with two input fields:
-   - **vacaturetekst URL**: Enter the URL of the job description.
+   - **vacaturetekst of URL**: Enter the URL of the job description or the text of the jod description.
    - **cv**: Enter the candidate's CV.
 
 2. Click the **Submit** button to initiate the process.
 
-3. The application will then extract the required skills and tools from both the job description and the CV, and it will display the results in a table format.
+3. The application will then extract the required skills and tools from both the job description and the CV, and it will display the results in a table format. It also shows the matching percentage.
 
 
 ## Acknowledgments
