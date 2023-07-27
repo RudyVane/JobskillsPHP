@@ -1,10 +1,10 @@
-<?php
 
+<?php
 class ApiHandler
 {
     // Function to check if the given text is a URL
     private function isUrl($text)
-    {
+    { 
         // Use a regular expression to check the URL
         $pattern = '/^(https?|ftp):\/\/[^\s\/$.?#].[^\s]*$/i';
 

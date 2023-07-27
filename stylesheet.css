@@ -58,23 +58,6 @@ body {
 			text-align: center;
         }
 
-        .result-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-            .result-box {
-            width: 25%;
-            padding: 20px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            margin: 10px;
-            text-align: center;
-        }
-		 .result-container {
-            display: flex;
-        }
 		
 		.flex-container {
 			display: flex;
@@ -85,9 +68,7 @@ body {
 			flex: 1;
 			margin: 10px;
 			padding: 20px;
-			background-color: #ffffff;
-			border: 1px solid #ccc;
+			background-color: #f5e0df;
+			border: 1px solid #f5ada9;
 			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 		}
-
-    
