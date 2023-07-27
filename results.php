@@ -19,6 +19,7 @@ if (isset($_SESSION['job_offer']) && isset($_SESSION['cv']) && isset($_SESSION['
 <link rel="stylesheet" type="text/css" href="stylesheet.css">
 </head>
 <body>
+<button onclick="goBack()">Terug naar startpagina</button>
 <h2>Uitkomst</h2>
 <p>Percentage: <?php echo $match; ?></p>
     <div class="flex-container">
@@ -42,14 +43,17 @@ if (isset($_SESSION['job_offer']) && isset($_SESSION['cv']) && isset($_SESSION['
         </div>
 
     </div>
-	
+<script>
+        // JavaScript function to go back to index.php
+        function goBack() {
+            window.location.href = 'index.php';
+        }
+    </script>	
 </body>
 </html>
 
 <?php
-    // Clear the session data
-    session_unset();
-    session_destroy();
+
 } else {
     // If session data is not available, redirect back to the index page
     header("Location: index.php");
