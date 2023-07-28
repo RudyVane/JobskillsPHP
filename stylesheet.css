@@ -1,7 +1,12 @@
 body {
             font-family: Arial, sans-serif;
             margin: 20px;
-			background-color: #9dbef2;
+			background-color: #f8f8f8; /* Achtergrondkleur */
+			background-image: url("marissa-rodriguez-2mKYEVGA4jE-unsplash.jpg");
+			background-repeat: no-repeat; /* Voorkomt dat de achtergrondafbeelding zich herhaalt */
+			background-size: cover; /* Make the background cover the entire screen */
+
+
         }
 		
 		form {
@@ -46,6 +51,12 @@ body {
         form input[type="submit"]:hover {
             background-color: #45a049;
         }
+		
+		 h1 {
+			color: blue;
+            margin-top: 10px;
+			text-align: center;
+        }
 
         h2 {
 			color: blue;
@@ -61,8 +72,8 @@ body {
 		
 		.flex-container {
 			display: flex;
-			width: 100%;
-			max-width: 1200px;
+			
+			
 		}
 		.flex-item {
 			flex: 1;

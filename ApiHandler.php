@@ -117,7 +117,8 @@ class ApiHandler
 	$_SESSION['match'] = $percentage . "%";
 				
                 // Redirect to the results page to display the API response
-                header("Location: results.php");
+                //header("Location: results.php");
+				echo "<script> location.href='results.php'; </script>";
                 exit();
             } else {
                 // Als de vereiste velden niet zijn ingevuld, terugsturen naar het formulier met een foutmelding

@@ -1,13 +1,8 @@
 <?php
-// letter.php will display the motivation letter.
 
 session_start();
-
-if (isset($_SESSION['motivation'])) {
-    
-	$letter = $_SESSION['motivation'];
-	
-                  
+    $motivation = $_SESSION['motivation'];
+              
 ?>
 
 <!DOCTYPE html>
@@ -17,20 +12,17 @@ if (isset($_SESSION['motivation'])) {
 <link rel="stylesheet" type="text/css" href="stylesheet.css">
 </head>
 <body>
-<button onclick="goBack()">Terug naar startpagina</button>
-<h2>Motivatiebrief</h2>
+<button onclick="goBack()">Terug naar startpagina</button><br>
+<h2>Motivatiebrief</h2><br>
+    <div class="flex-container" style =  "text-align: center">
 
-    <div class="flex-container">
-
-        <!-- Display variable 1: Required skills and tools from the job offer -->
+        <!-- Display variable 1:  -->
         <div class="flex-item">
             
-            <p><?php echo nl2br($letter); ?></p>
+            <p><?php echo nl2br($motivation); ?></p>
         </div>
 
-       
     </div>
-	
 <script>
         // JavaScript function to go back to index.php
         function goBack() {
@@ -39,12 +31,3 @@ if (isset($_SESSION['motivation'])) {
     </script>	
 </body>
 </html>
-
-<?php
-
-} else {
-    // If session data is not available, redirect back to the index page
-    header("Location: index.php");
-    exit();
-}
-?>

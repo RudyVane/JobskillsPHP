@@ -19,10 +19,10 @@ if (isset($_SESSION['job_offer']) && isset($_SESSION['cv']) && isset($_SESSION['
 <link rel="stylesheet" type="text/css" href="stylesheet.css">
 </head>
 <body>
-<button onclick="goBack()">Terug naar startpagina</button>
-<h2>Uitkomst</h2>
-<p>Percentage: <?php echo $match; ?></p>
-    <div class="flex-container">
+<button onclick="goBack()">Terug naar startpagina</button><br>
+<h2>Uitkomst</h2><br>
+<p>Percentage: <?php echo $match; ?></p><br>
+    <div class="flex-container" style =  "text-align: center">
 
         <!-- Display variable 1: Required skills and tools from the job offer -->
         <div class="flex-item">

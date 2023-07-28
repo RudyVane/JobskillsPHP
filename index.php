@@ -4,6 +4,7 @@ session_start();
 // Controleer of er eerder ingediende waarden in de sessie zijn opgeslagen
 $job = isset($_SESSION['jobtxt']) ? $_SESSION['jobtxt'] : '';
 $cv = isset($_SESSION['cvtxt']) ? $_SESSION['cvtxt'] : '';
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -75,13 +76,13 @@ $cv = isset($_SESSION['cvtxt']) ? $_SESSION['cvtxt'] : '';
     </script>
 </head>
 <body>
-    <h2>Vaardigheden vergelijker</h2>
+    <h1>Vaardigheden vergelijker</h1><br>
     <p>Deze tool vergelijkt de ingegeven vacaturetekst met jouw CV en geeft de overeenkomsten weer of schrijft een motivatiebrief voor jou.</p><br>
     <form action="" method="post" onsubmit="showLoadingModal()">
         <p>Vacature URL of tekst:</p>
-        <textarea name="job" rows="7" cols="10" placeholder="voer hier de url of de tekst van de vacature in"><?php echo htmlspecialchars($job); ?></textarea>
+        <textarea name="job" rows="7" cols="10" required placeholder="voer hier de url of de tekst van de vacature in"><?php echo htmlspecialchars($job); ?></textarea>
         <p>cv</p>
-        <textarea name="cv" rows="7" cols="10" placeholder="voer hier je cv in"><?php echo htmlspecialchars($cv); ?></textarea>
+        <textarea name="cv" rows="7" cols="10" required placeholder="voer hier je cv in"><?php echo htmlspecialchars($cv); ?></textarea>
         <br>
         <input type="submit" name="match" value="Overeenkomende vaardigheden zoeken">
 		<input type="submit" name="motivation" value="Motivatiebrief schrijven">
