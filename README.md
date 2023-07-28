@@ -1,6 +1,6 @@
 # Skills Extraction from Job Description and CV
 
-This is a simple web application that allows users to extract required skills and tools from a job description and a candidate's CV. The application makes use of the OpenAI GPT-3.5 Turbo model to process the input texts and generate the desired output.
+This is a simple web application that allows users to extract required skills and tools from a job description and a candidate's CV. The application makes use of the OpenAI GPT-3.5 Turbo model to process the input texts and generate the desired output. It also can write a motivation letter for the job
 
 ## Prerequisites
 
@@ -26,9 +26,10 @@ Before running the application, you need to make sure you have the following com
    - **vacaturetekst of URL**: Enter the URL of the job description or the text of the job description.
    - **cv**: Enter the candidate's CV.
 
-2. Click the **Submit** button to initiate the process.
+2. Click the **Overeenkomende vaardigheden zoeken** button for matching skills.
+3. Click the **Motivatiebrief schrijven** button to write a motivation letter.
 
-3. The application will then extract the required skills and tools from both the job description and the CV, and it will display the results in a table format. It also shows the matching percentage.
+4. The application will then extract the required skills and tools from both the job description and the CV, and it will display the results in a table format. It also shows the matching percentage, or it will generate a motivation letter.
 
 
 ## Acknowledgments
