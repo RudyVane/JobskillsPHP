@@ -35,7 +35,7 @@ class ApiHandler
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'Extract the required skills and qualifications from the following job offer. Please focus only on the skills and qualifications directly relevant to the role. Omit general terms and avoid including unrelated words like \'phone,\' \'budget,\' and similar non-skill related terms. Your response should include a unordered list of essential skills and qualifications required for the job, your answer must be in dutch:',
+                            'content' => 'Extract the required skills and qualifications from the following job offer. Please focus only on the skills and qualifications directly relevant to the role. Omit general terms and avoid including unrelated words like \'phone,\' \'budget,\' and similar non-skill related terms. Your response should be a unordered list of essential skills and qualifications required for the job, describe them in one or two words, your answer must be in dutch:',
                         ],
                         [
                             'role' => 'user',
@@ -44,7 +44,7 @@ class ApiHandler
                     ],
                     'temperature' => 0,
                     'max_tokens' => 3000,
-                    'model' => 'gpt-3.5-turbo-16k',
+                    'model' => 'gpt-4',
                 ];
 
                 // Make the API call for the job offer
@@ -69,7 +69,7 @@ class ApiHandler
                     ],
                     'temperature' => 0,
                     'max_tokens' => 3000,
-                    'model' => 'gpt-3.5-turbo-16k',
+                    'model' => 'gpt-4',
                 ];
 
                 // Make the API call for the CV
@@ -80,7 +80,7 @@ class ApiHandler
 				'messages' => [
             [
                 'role' => 'system',
-                'content' => 'Compare the skills in the job offer and CV and return the matching skills as a list in Dutch, only return a unordered list of matching skills, no extra text:',
+                'content' => 'Compare the skills listed in response_job_offer with the listed skills in the response_cv and return only the matching skills as a list in Dutch, you must return a unordered list of matching skills, no extra text:',
             ],
             [
                 'role' => 'user',
@@ -97,7 +97,7 @@ class ApiHandler
         ],
         'temperature' => 0,
         'max_tokens' => 3000,
-        'model' => 'gpt-3.5-turbo-16k',
+        'model' => 'gpt-4',
     ];
 
     $response_match = $this->call_openai_api($data_match);
@@ -111,11 +111,14 @@ class ApiHandler
     
     // Store the data in the session to access it in the results page
     session_start();
+	$jobtxt = $_SESSION['jobtxt'];
+    $cvtxt = $_SESSION['cvtxt'];
     $_SESSION['job_offer'] = $response_job_offer['choices'][0]['message']['content'];
     $_SESSION['cv'] = $response_cv['choices'][0]['message']['content'];
     $_SESSION['matching_skills'] = $response_match['choices'][0]['message']['content'];
 	$_SESSION['match'] = $percentage . "%";
-				
+	$_SESSION['jobtxt'] = $jobtxt;
+    $_SESSION['cvtxt'] = $cvtxt;			
                 // Redirect to the results page to display the API response
                 //header("Location: results.php");
 				echo "<script> location.href='results.php'; </script>";
@@ -131,7 +134,7 @@ class ApiHandler
     // Function to read the API key from the file
     private function read_api_key()
     {
-        $file = "api.txt"; // Replace with the path to your api_key.txt file
+        $file = "Code/api.txt"; // Replace with the path to your api_key.txt file
         $api_key = trim(file_get_contents($file));
         return $api_key;
     }

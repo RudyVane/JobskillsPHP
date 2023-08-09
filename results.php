@@ -8,7 +8,8 @@ if (isset($_SESSION['job_offer']) && isset($_SESSION['cv']) && isset($_SESSION['
     $cv = $_SESSION['cv'];
     $matching_skills = $_SESSION['matching_skills'];
 	$match = $_SESSION['match'];
-	
+	$jobtxt = $_SESSION['jobtxt'];
+    $cvtxt = $_SESSION['cvtxt'];
                   
 ?>
 
@@ -17,6 +18,7 @@ if (isset($_SESSION['job_offer']) && isset($_SESSION['cv']) && isset($_SESSION['
 <head>
 <title>Vaardigheden uit vacaturetekst filteren - Results</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css">
+
 </head>
 <body>
 <button onclick="goBack()">Terug naar startpagina</button><br>
@@ -48,7 +50,8 @@ if (isset($_SESSION['job_offer']) && isset($_SESSION['cv']) && isset($_SESSION['
         function goBack() {
             window.location.href = 'index.php';
         }
-    </script>	
+    </script>
+
 </body>
 </html>
 

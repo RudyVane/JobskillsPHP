@@ -25,7 +25,7 @@ class ApiHandler1
                 // Controleer of $job een URL is
                 if ($this->isUrl($job)) {
                     // Text processing for job offer and CV
-                    $jobOfferText = $this->getPlainTextFromUrl($job);
+                    $jobOfferText = $this->getPlainTextFromUrl($job); 
                 } else {
                     $jobOfferText = $job;
                 }
@@ -44,17 +44,17 @@ class ApiHandler1
                     ],
                     'temperature' => 0,
                     'max_tokens' => 3000,
-                    'model' => 'gpt-3.5-turbo-16k',
+                    'model' => 'gpt-4',
                 ];
 
                 // Make the API call for the job offer
                 $response_job_offer = $this->call_openai_api($data_job_offer);
 	
 				// Get the matching skills from the API response
-				$job = $response_job_offer['choices'][0]['message']['content'];
+				$job1 = $response_job_offer['choices'][0]['message']['content'];
 
 				// Count the skills in the matching skills result
-				$count_job = count(explode(" ", strip_tags($job)));
+				$count_job = count(explode(" ", strip_tags($job1)));
                 // Define the data for the API call for the CV
                 $data_cv = [
                     'messages' => [
@@ -69,7 +69,7 @@ class ApiHandler1
                     ],
                     'temperature' => 0,
                     'max_tokens' => 3000,
-                    'model' => 'gpt-3.5-turbo-16k',
+                    'model' => 'gpt-4',
                 ];
 
                 // Make the API call for the CV
@@ -97,7 +97,7 @@ class ApiHandler1
         ],
         'temperature' => 0,
         'max_tokens' => 3000,
-        'model' => 'gpt-3.5-turbo-16k',
+        'model' => 'gpt-4',
     ];
 
     $response_match = $this->call_openai_api($data_match);
@@ -106,7 +106,7 @@ class ApiHandler1
 				'messages' => [
             [
                 'role' => 'system',
-                'content' => 'write a motivation letter using the job offer text and the matching skills from the match list, your answer must be in dutch:',
+                'content' => 'write a motivation letter using the job offer text and the candidate cv, name each skill and write what experience the candidate has with that, do not make things up, make this an unordered list, your answer must be in dutch:',
             ],
             [
                 'role' => 'user',
@@ -114,25 +114,27 @@ class ApiHandler1
             ],
             [
                 'role' => 'system',
-                'content' => 'match list',
+                'content' => 'cv:',
             ],
             [
                 'role' => 'user',
-                'content' => $response_match['choices'][0]['message']['content'],
+                'content' => $cv,
             ],
         ],
         'temperature' => 0,
         'max_tokens' => 3000,
-        'model' => 'gpt-3.5-turbo-16k',
+        'model' => 'gpt-4',
     ];
 
     $letter = $this->call_openai_api($motivation);
-    
+   
     // Store the data in the session to access it in the results page
     session_start();
-    
-    $_SESSION['motivation'] = $letter['choices'][0]['message']['content'];
-	
+    $jobtxt = $_SESSION['jobtxt'];
+    $cvtxt = $_SESSION['cvtxt'];
+    $_SESSION['motivation'] = $letter['choices'][0]['message']['content']; 
+	$_SESSION['jobtxt'] = $jobtxt;
+    $_SESSION['cvtxt'] = $cvtxt;	
 				
                 // Redirect to the results page to display the API response
                 //header("Location: letter.php");
@@ -149,7 +151,7 @@ class ApiHandler1
     // Function to read the API key from the file
     private function read_api_key()
     {
-        $file = "api.txt"; // Replace with the path to your api_key.txt file
+        $file = "Code/api.txt"; // Replace with the path to your api_key.txt file
         $api_key = trim(file_get_contents($file));
         return $api_key;
     }

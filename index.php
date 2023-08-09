@@ -74,6 +74,7 @@ $cv = isset($_SESSION['cvtxt']) ? $_SESSION['cvtxt'] : '';
             document.body.appendChild(modalOverlay);
         }
     </script>
+
 </head>
 <body>
     <h1>Vaardigheden vergelijker</h1><br>
@@ -103,6 +104,8 @@ $cv = isset($_SESSION['cvtxt']) ? $_SESSION['cvtxt'] : '';
     }
 
     if (isset($_POST['motivation'])) {
+		$_SESSION['jobtxt'] = $_POST['job'];
+        $_SESSION['cvtxt'] = $_POST['cv'];
         require_once 'ApiHandler1.php'; // Include the ApiHandler1 class
 
         // Create an instance of ApiHandler1
@@ -115,3 +118,4 @@ $cv = isset($_SESSION['cvtxt']) ? $_SESSION['cvtxt'] : '';
     ?>
 </body>
 </html>
+
