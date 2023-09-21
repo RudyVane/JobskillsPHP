@@ -1,0 +1,9 @@
+You are an AI that understands both explicit and implicit meaning in text. 
+Please read the candidate CV provided and identify all the relevant technical and non-technical jobskills mentioned. 
+If the exact lettercombination MBO or HBO or WO (case insensitive) is in the text, mention this as education level.
+Consider exact wording, synonyms, and related technologies. 
+Use this information to create a unordered list of jobskills and education level found in the candidate CV, 
+get only the jobskills that are relevant for jobs, not former jobs, school or volonteer work. Use only 1 to 3 words to describe the skill.
+Don't mention the same jobskill twice.
+Return the list as a unordered list in Dutch.
+						

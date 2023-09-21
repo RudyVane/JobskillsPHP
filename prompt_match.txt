@@ -1,0 +1,10 @@
+You are an AI that understands both explicit and implicit meaning in text. 
+Read the list of required skills and desirable jobskills from the next response_joboffer. This is the first list.
+Then read the list of candidate jobskills from the next response_CV. This is the second list.
+Make a list of jobskills that are in the first list as well as in the second list, not in just one list, the terms do not need to be exact, 
+a term or a phrase might not match exactly but could still refer to the same skill or a relevant one. Laravel is not a match with PHP, you can use a language without a framework.
+Return an unordered list of these matching jobskills, use only 1 to 3 words to describe the skill.
+Divide them in technical and not-technical jobskills.
+Don't mention the same jobskill twice.
+Return the list as a unordered list in Dutch.
+						

@@ -29,14 +29,14 @@ class ApiHandler
                 } else {
                     $jobOfferText = $job;
                 }
-
+$prompt_job = $this->read_prompt_job();
                 // Define the data for the API call for the job offer
                 $data_job_offer = [
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'Extract the required skills and qualifications from the following job offer. Please focus only on the skills and qualifications directly relevant to the role. Omit general terms and avoid including unrelated words like \'phone,\' \'budget,\' and similar non-skill related terms. Your response should be a unordered list of essential skills and qualifications required for the job, describe them in one or two words, your answer must be in dutch:',
-                        ],
+                            'content' => $prompt_job,
+						],
                         [
                             'role' => 'user',
                             'content' => $jobOfferText,
@@ -55,13 +55,15 @@ class ApiHandler
 
 				// Count the skills in the matching skills result
 				$count_job = count(explode(" ", strip_tags($job)));
+				
+				$prompt_cv = $this->read_prompt_cv();
                 // Define the data for the API call for the CV
                 $data_cv = [
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'Extract the jobskills from the candidate\'s CV (use one word per skill) as an unordered list in dutch:',
-                        ],
+                            'content' => $prompt_cv,
+							],
                         [
                             'role' => 'user',
                             'content' => $cv,
@@ -74,14 +76,15 @@ class ApiHandler
 
                 // Make the API call for the CV
                 $response_cv = $this->call_openai_api($data_cv);
-
+				
+$prompt_match = $this->read_prompt_match();
                 // Make an API call to compare job offer and CV responses
 			$data_match = [
 				'messages' => [
             [
                 'role' => 'system',
-                'content' => 'Compare the skills listed in response_job_offer with the listed skills in the response_cv and return only the matching skills as a list in Dutch, you must return a unordered list of matching skills, no extra text:',
-            ],
+                'content' => $prompt_match,
+			],
             [
                 'role' => 'user',
                 'content' => $response_job_offer['choices'][0]['message']['content'],
@@ -102,13 +105,44 @@ class ApiHandler
 
     $response_match = $this->call_openai_api($data_match);
 	
+	$prompt_missing = $this->read_prompt_missing();
 	// Get the matching skills from the API response
 	$matching_skills_result = $response_match['choices'][0]['message']['content'];
+	
+	                // Make an API call to compare job offer and CV responses
+			$data_missing = [
+				'messages' => [
+            [
+                'role' => 'system',
+                'content' => $prompt_missing,
+			],
+            [
+                'role' => 'user',
+                'content' => $response_job_offer['choices'][0]['message']['content'],
+            ],
+            [
+                'role' => 'system',
+                'content' => 'CV',
+            ],
+            [
+                'role' => 'user',
+                'content' => $response_match['choices'][0]['message']['content'],
+            ],
+        ],
+        'temperature' => 0,
+        'max_tokens' => 3000,
+        'model' => 'gpt-4',
+    ];
+
+    $response_missing = $this->call_openai_api($data_missing);
+	
+	// Get the matching skills from the API response
+	$missing_skills_result = $response_missing['choices'][0]['message']['content'];
 
 	// Count the skills in the matching skills result
 	$count_matching_skills = count(explode(" ", strip_tags($matching_skills_result)));
 	$percentage = $count_matching_skills / $count_job *100;
-    
+    $afgerond = number_format($percentage, 2);
     // Store the data in the session to access it in the results page
     session_start();
 	$jobtxt = $_SESSION['jobtxt'];
@@ -116,7 +150,8 @@ class ApiHandler
     $_SESSION['job_offer'] = $response_job_offer['choices'][0]['message']['content'];
     $_SESSION['cv'] = $response_cv['choices'][0]['message']['content'];
     $_SESSION['matching_skills'] = $response_match['choices'][0]['message']['content'];
-	$_SESSION['match'] = $percentage . "%";
+	$_SESSION['missing_skills'] = $response_missing['choices'][0]['message']['content'];
+	$_SESSION['match'] = $afgerond . "%";
 	$_SESSION['jobtxt'] = $jobtxt;
     $_SESSION['cvtxt'] = $cvtxt;			
                 // Redirect to the results page to display the API response
@@ -138,7 +173,30 @@ class ApiHandler
         $api_key = trim(file_get_contents($file));
         return $api_key;
     }
-
+ private function read_prompt_job()
+    {
+        $file = "prompt_job.txt"; // Replace with the path to your api_key.txt file
+        $prompt_job = trim(file_get_contents($file));
+        return $prompt_job;
+    }
+	 private function read_prompt_cv()
+    {
+        $file = "prompt_cv.txt"; // Replace with the path to your api_key.txt file
+        $prompt_cv = trim(file_get_contents($file));
+        return $prompt_cv;
+    }
+	 private function read_prompt_match()
+    {
+        $file = "prompt_match.txt"; // Replace with the path to your api_key.txt file
+        $prompt_match = trim(file_get_contents($file));
+        return $prompt_match;
+    }
+	 private function read_prompt_missing()
+    {
+        $file = "prompt_missing.txt"; // Replace with the path to your api_key.txt file
+        $prompt_missing = trim(file_get_contents($file));
+        return $prompt_missing;
+    }
     // Function to make the API call using cURL
     private function call_openai_api($data)
     {

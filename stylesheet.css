@@ -6,7 +6,6 @@ body {
 			background-repeat: no-repeat; /* Voorkomt dat de achtergrondafbeelding zich herhaalt */
 			background-size: cover; /* Make the background cover the entire screen */
 
-
         }
 		
 		form {
@@ -19,12 +18,13 @@ body {
 		}
 
         form p {
-            font-size: 18px;
+            font-size: 1.3vw;
             margin-bottom: 5px;
         }
 		
 		p {
-			color: blue;
+			color: black;
+			font-size: 1.2vw;
 			text-align: center;
 		}
 
@@ -77,9 +77,18 @@ body {
 		}
 		.flex-item {
 			flex: 1;
-			margin: 10px;
-			padding: 20px;
-			background-color: #f5e0df;
+			margin: 0 15vw 0 15vw;
+			padding: 0 5vw 0 5vw;
+			font-family: arial;
+			background-color: #ffffff;
+			border: 1px solid #f5ada9;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+		.flex-item2 {
+			flex: 1;
+			
+			font-family: arial;
+			background-color: #ffffff;
 			border: 1px solid #f5ada9;
 			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 		}

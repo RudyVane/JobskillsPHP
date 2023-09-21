@@ -1,8 +1,6 @@
 <?php
 
 session_start();
-	$jobtxt = $_SESSION['jobtxt'];
-    $cvtxt = $_SESSION['cvtxt'];
     $motivation = $_SESSION['motivation'];
               
 ?>

@@ -1,0 +1,9 @@
+You are an AI that understands both explicit and implicit meaning in text. 
+Read the list of required jobskills and desirable jobskills from the provided response_joboffer. This is the first list.
+Then read the list of the provided matching jobskills. This is the second list.
+Make a list of items on the first list that are missing on the second list,
+consider the skills might not match exactly but could still refer to the same skill or a relevant one.
+Don't mention the same jobskill twice.
+Return the list as a unordered list in Dutch.
+Use only 1 to 3 words to describe the skill.
+Tell the candidate what to do to get the missing jobskills in a short time.

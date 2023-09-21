@@ -25,16 +25,88 @@ class ApiHandler1
                 // Controleer of $job een URL is
                 if ($this->isUrl($job)) {
                     // Text processing for job offer and CV
-                    $jobOfferText = $this->getPlainTextFromUrl($job); 
+                    $jobOfferText = $this->getPlainTextFromUrl($job);
                 } else {
                     $jobOfferText = $job;
                 }
 
+                // Define the data for the API call for the job offer
+                $data_job_offer = [
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'Extract the required skills and qualifications from the following job offer. Please focus only on the skills and qualifications directly relevant to the role. Omit general terms and avoid including unrelated words like \'phone,\' \'budget,\' and similar non-skill related terms. Your response should include a unordered list of essential skills and qualifications required for the job, your answer must be in dutch:',
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => $jobOfferText,
+                        ],
+                    ],
+                    'temperature' => 0,
+                    'max_tokens' => 3000,
+                    'model' => 'gpt-4',
+                ];
+
+                // Make the API call for the job offer
+                $response_job_offer = $this->call_openai_api($data_job_offer);
+	
+				// Get the matching skills from the API response
+				$job = $response_job_offer['choices'][0]['message']['content'];
+
+				// Count the skills in the matching skills result
+				$count_job = count(explode(" ", strip_tags($job)));
+                // Define the data for the API call for the CV
+                $data_cv = [
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'Extract the jobskills from the candidate\'s CV (use one word per skill) as an unordered list in dutch:',
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => $cv,
+                        ],
+                    ],
+                    'temperature' => 0,
+                    'max_tokens' => 3000,
+                    'model' => 'gpt-4',
+                ];
+
+                // Make the API call for the CV
+                $response_cv = $this->call_openai_api($data_cv);
+
+                // Make an API call to compare job offer and CV responses
+			$data_match = [
+				'messages' => [
+            [
+                'role' => 'system',
+                'content' => 'Compare the skills in the job offer and CV and return the matching skills as a list in Dutch, only return a unordered list of matching skills, no extra text:',
+            ],
+            [
+                'role' => 'user',
+                'content' => $response_job_offer['choices'][0]['message']['content'],
+            ],
+            [
+                'role' => 'system',
+                'content' => 'CV',
+            ],
+            [
+                'role' => 'user',
+                'content' => $response_cv['choices'][0]['message']['content'],
+            ],
+        ],
+        'temperature' => 0,
+        'max_tokens' => 3000,
+        'model' => 'gpt-4',
+    ];
+
+    $response_match = $this->call_openai_api($data_match);
+	
 	$motivation = [
 				'messages' => [
             [
                 'role' => 'system',
-                'content' => 'write a motivation letter using the job offer text and the candidate cv, name each skill and write what experience the candidate has with that, do not make things up, make this an unordered list, your answer must be in dutch:',
+                'content' => 'write a motivation letter using the job offer text and the matching skills from the match list, your answer must be in dutch:',
             ],
             [
                 'role' => 'user',
@@ -42,11 +114,11 @@ class ApiHandler1
             ],
             [
                 'role' => 'system',
-                'content' => 'cv:',
+                'content' => 'match list',
             ],
             [
                 'role' => 'user',
-                'content' => $cv,
+                'content' => $response_match['choices'][0]['message']['content'],
             ],
         ],
         'temperature' => 0,
@@ -55,14 +127,12 @@ class ApiHandler1
     ];
 
     $letter = $this->call_openai_api($motivation);
-   
+    
     // Store the data in the session to access it in the results page
     session_start();
-    $jobtxt = $_SESSION['jobtxt'];
-    $cvtxt = $_SESSION['cvtxt'];
-    $_SESSION['motivation'] = $letter['choices'][0]['message']['content']; 
-	$_SESSION['jobtxt'] = $jobtxt;
-    $_SESSION['cvtxt'] = $cvtxt;	
+    
+    $_SESSION['motivation'] = $letter['choices'][0]['message']['content'];
+	
 				
                 // Redirect to the results page to display the API response
                 //header("Location: letter.php");
@@ -79,7 +149,7 @@ class ApiHandler1
     // Function to read the API key from the file
     private function read_api_key()
     {
-        $file = "Code/api.txt"; // Replace with the path to your api_key.txt file
+        $file = "api.txt"; // Replace with the path to your api_key.txt file
         $api_key = trim(file_get_contents($file));
         return $api_key;
     }
